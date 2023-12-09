@@ -1,6 +1,7 @@
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import Home from '../views/home/home';
+import Policies from '../views/policies/policies';
 import Simulation from '../views/simulation/simulation';
 
 const Stack = createStackNavigator();
@@ -11,6 +12,11 @@ const MainStack = () => (
       name="home"
       component={Home}
       options={{title: 'Inicio', headerShown: false}}
+    />
+    <Stack.Screen
+      name="policies"
+      component={Policies}
+      options={{title: 'Politicas guardadas'}}
     />
     <Stack.Screen
       name="simulation"

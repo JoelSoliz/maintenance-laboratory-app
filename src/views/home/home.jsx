@@ -9,7 +9,9 @@ import {
   Text,
 } from '@ui-kitten/components';
 import {generatePolicy1, generatePolicy2} from '../../utilities/generator';
-import {usePoliciesStore} from '../../utilities/context';
+import {usePoliciesStore} from '../../store/context';
+import {savePolicy} from '../../store/firebase';
+import {formatDateToString} from '../../utilities/file';
 
 const useInputState = (initialValue = '') => {
   const [value, setValue] = React.useState(initialValue);
@@ -19,6 +21,7 @@ const useInputState = (initialValue = '') => {
 const Home = ({navigation}) => {
   const setPolicy1 = usePoliciesStore(state => state.setPolicy1);
   const setPolicy2 = usePoliciesStore(state => state.setPolicy2);
+  const userID = usePoliciesStore(state => state.userID);
 
   const mean = useInputState();
   const deviation = useInputState();
@@ -120,11 +123,80 @@ const Home = ({navigation}) => {
                 totalTime: parseInt(totalTime.value),
               });
               setPolicy2(policy2);
+              if (userID) {
+                savePolicy({
+                  policy1,
+                  policy2,
+                  name: formatDateToString(new Date()),
+                  userID,
+                });
+              }
               navigation.navigate('simulation');
             }}
             style={styles.button}>
             Simular
           </Button>
+          <Button
+            onPress={() => {
+              navigation.navigate('policies');
+              console.log('policiesss');
+            }}
+            style={{...styles.button, marginTop: 10}}>
+            Ver politicas guardadas
+          </Button>
+        </View>
+
+        <View style={{marginTop: 20, marginHorizontal: 10}}>
+          <Text category="h4" style={{textAlign: 'center'}}>
+            ¡Bienvenido al caso de estudio del Laboratorio de Mantenimiento!
+          </Text>
+          <Text category="s1">
+            Esta herramienta ha sido diseñada para ayudarte a tomar decisiones
+            informadas en el contexto del caso de estudio del Laboratorio de
+            Mantenimiento.
+          </Text>
+          <Text category="h5">Desafío:</Text>
+          <Text category="s1">
+            Nos encontramos ante un desafío de mantenimiento en el cual ciertos
+            equipos, que contienen 4 componentes electrónicos idénticos,
+            experimentan fallas frecuentes, resultando en desconexiones del
+            equipo durante la reposición.
+          </Text>
+          <Text category="h5">Cómo Funciona:</Text>
+          <Text category="s1">
+            * El programa utiliza la distribución normal acumulativa para
+            simular el tiempo de vida de los componentes. Esto permite capturar
+            la variabilidad en el desgaste de los componentes, considerando la
+            media y la desviación estándar
+          </Text>
+          <Text category="s1">
+            * Mediante la simulación, el programa modela la operación del equipo
+            durante “Ejemplo (20,000 horas)” bajo dos políticas de reposición:
+            reemplazo individual cuando falla un componente y reemplazo
+            simultáneo de los cuatro componentes al fallar cualquiera de ellos.
+          </Text>
+          <Text category="s1">
+            * El programa calcula los costos asociados con cada política,
+            considerando el costo de los nuevos componentes, el costo por hora
+            de desconexión y la duración de la desconexión (1 hora para
+            reemplazo individual, 2 horas para reemplazo simultáneo).
+          </Text>
+          <Text category="s1">
+            * Se realiza un análisis comparativo de los costos acumulativos bajo
+            ambas políticas para determinar cuál es más económica y eficiente.
+          </Text>
+          <Text category="h5">Políticas de Inventario a Evaluar:</Text>
+          <Text category="s1">
+            * Politica 1: Reemplazar los componentes cuando fallecen
+            individualmente .
+          </Text>
+          <Text category="s1">
+            * Politica 2: Reemplazar todos los componentes al mismo tiempo.
+          </Text>
+          <Text category="s1" status="info" style={{fontWeight: 'bold'}}>
+            El objetivo es determinar cuál de las dos políticas de reposición es
+            más económica y eficiente
+          </Text>
         </View>
       </ScrollView>
     </Layout>

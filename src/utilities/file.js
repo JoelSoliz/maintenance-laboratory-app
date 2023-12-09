@@ -40,7 +40,7 @@ const columnsID = [
   'partialCost',
 ];
 
-function formatDateToString(date) {
+export function formatDateToString(date) {
   const pad = num => (num < 10 ? '0' + num : num);
 
   const day = pad(date.getDate());
@@ -52,7 +52,7 @@ function formatDateToString(date) {
   return `${day}${month}${year}_${hours}${minutes}`;
 }
 
-export const createExcelFile = (configuration, events) => {
+export const createExcelFile = (configuration, events, date = null) => {
   let data = [
     ['Tiempo de vida (distribución normal):'],
     [
@@ -87,9 +87,9 @@ export const createExcelFile = (configuration, events) => {
     type: 'binary',
   });
 
-  const fileName = `politica ${configuration.type} - ${formatDateToString(
-    new Date(),
-  )}`;
+  const fileName = `politica ${configuration.type} - ${
+    date ?? formatDateToString(new Date())
+  }`;
   const filePath = `${RNFS.DownloadDirectoryPath}/${fileName}.xlsx`;
 
   RNFS.writeFile(filePath, base64.encode(wbout), 'base64')

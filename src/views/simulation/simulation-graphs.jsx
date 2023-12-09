@@ -1,7 +1,7 @@
 import {ScrollView} from 'react-native';
 import {PieChart} from 'react-native-chart-kit';
 import {Icon, Layout, Text} from '@ui-kitten/components';
-import {usePoliciesStore} from '../../utilities/context';
+import {usePoliciesStore} from '../../store/context';
 
 const LabelIcon = ({color, size}) => {
   return (

@@ -1,7 +1,7 @@
 import React from 'react';
 import {ScrollView, View} from 'react-native';
 import {Button, Icon, Layout, Spinner, Text} from '@ui-kitten/components';
-import {usePoliciesStore} from '../../utilities/context';
+import {usePoliciesStore} from '../../store/context';
 import {createExcelFile} from '../../utilities/file';
 import {generateTextResult} from '../../utilities/generator';
 
@@ -21,6 +21,7 @@ const SimulationResult = () => {
   const [downloading2, setDownloading2] = React.useState(false);
   const policy1 = usePoliciesStore(state => state.policy1);
   const policy2 = usePoliciesStore(state => state.policy2);
+  const date = usePoliciesStore(state => state.date);
   let better =
     policy1.cumulativeCost > policy2.cumulativeCost
       ? 'Politica 2'
@@ -62,7 +63,7 @@ const SimulationResult = () => {
               disabled={downloading1 || downloading2}
               onPress={() => {
                 setDownloading1(true);
-                createExcelFile(policy1.config, policy1.events);
+                createExcelFile(policy1.config, policy1.events, date);
                 setDownloading1(false);
               }}
               style={{marginBottom: 10}}>
@@ -73,7 +74,7 @@ const SimulationResult = () => {
               disabled={downloading1 || downloading2}
               onPress={() => {
                 setDownloading2(true);
-                createExcelFile(policy2.config, policy2.events);
+                createExcelFile(policy2.config, policy2.events, date);
                 setDownloading2(false);
               }}>
               Informe Política 2
